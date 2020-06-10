@@ -3,6 +3,8 @@
 #include <string.h>
 #include <math.h>
 
+//git test
+
 typedef struct
 {
     char city[50];
