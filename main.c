@@ -22,7 +22,7 @@ typedef struct
 // unsere Funktionen:
 
 void printShortesRoute();
-void nearestNeighbor();
+cityTemp* nearestNeighbor();
 void readcsv();
 void city_struct_to_csv();
 int menu();
@@ -34,7 +34,7 @@ int main()
 {
 
     cityTemp *citys = malloc(sizeof(cityTemp));
-    cityTemp *citys_sorted = malloc(sizeof(citys));
+
 //    printf("\n\n\n---%p\n\n\n", *citys);
 
     int running = 1;
@@ -92,23 +92,11 @@ int main()
 
             case 2:
             {
+                citys = cityInput(&cntr, citys);
 
+                citys = nearestNeighbor(&cntr, citys);
 
-                cityInput(&cntr, citys);
-
-                nearestNeighbor(citys, citys_sorted, cntr);
-
-                printShortesRoute(citys_sorted, cntr);
-
-                for(int i = 1; i < cntr+1; i++)                             // test ob die Daten eingelesen werden
-                    {
-
-                        printf("\n\ncity: %s\n",citys_sorted[i].city);
-
-                        printf("---------------------------------------------");
-
-                    }
-
+                printShortesRoute(&cntr, citys);
 
                 //Eingabe von Städtenamen
                 //TSM-Problem
@@ -140,7 +128,12 @@ int main()
         }
 
 
+
+
     }
+
+
+    free(citys);
 
     return 0;
 
@@ -148,51 +141,67 @@ int main()
 
 
 
-void printShortesRoute(cityTemp citys_sorted[101], int entries)
+void printShortesRoute(int *cntr_ptr, cityTemp *citys)
 {
-    printf("Kuerzeste Route:");
+    printf("\n\n\n#Kuerzeste Route: Zentrale");
 
-    for(int i = 0; i < entries+2; i++)
+    for(int i = 0; i < *cntr_ptr; i++)
     {
-        printf("  =>  ");
-        printf("%s", citys_sorted[i].city);
+        printf("  => ");
+        printf("%s", citys[i].city);
     }
+
+    printf("  => Zentrale\n\n\n");
 }
 
 
 
-void nearestNeighbor(cityTemp citys[100], cityTemp citys_sorted[100], int entries)
+cityTemp* nearestNeighbor(int *cntr_ptr, cityTemp *citys)
 {
-
-    printf("test\n\ntest\n\ntest\n\n");
-
-
-    float distance = 1000;
-    float shortestDistance = 1000;
+    float distance = 10000;
+    float shortestDistance = 10000;
     int nextInList = 0;
     float xCoordinate = 0;
     float yCoordinate = 0;
     float totalDistance = 0;
 
-
-    strcpy(citys_sorted[0].city, "ZentraleWien");
-    strcpy(citys_sorted[0].city_ascii, "Vienna");
-    citys_sorted[0].lat = 48.2;
-    citys_sorted[0].lng = 16.3666;
-    strcpy(citys_sorted[0].country, "Austria");
-    strcpy(citys_sorted[0].iso2, "AT");
-    strcpy(citys_sorted[0].iso3, "AUT");
-    strcpy(citys_sorted[0].admin_name, "Wien");
-    strcpy(citys_sorted[0].capital, "primary");
-    citys_sorted[0].population = 2400000;
-    citys_sorted[0].id = 1040261752;
+    cityTemp *citys_sorted = malloc(*cntr_ptr*sizeof(cityTemp));
 
 
-
-
-    for(int i = 0; i < entries; i++)
+    for(int i = 0; i < *cntr_ptr; i++)                     //nächste Stadt zur Zentrale (Wien)
     {
-        for(int j = 1; j < entries+1; j++)
+        xCoordinate = 111.3 * (citys[i].lat - 48.2);
+        yCoordinate = 71.5 * (citys[i].lng - 16.3666);
+
+        distance = sqrt(pow(xCoordinate, 2.0) + pow(yCoordinate, 2.0));
+
+        if(distance > 0 && distance < shortestDistance)
+                {
+                    shortestDistance = distance;
+                    nextInList = i;
+                }
+    }
+
+
+    strcpy(citys_sorted[0].city, citys[nextInList].city);
+    citys_sorted[0].lat = citys[nextInList].lat;
+    citys_sorted[0].lng = citys[nextInList].lng;
+    strcpy(citys_sorted[0].country, citys[nextInList].country);
+    strcpy(citys_sorted[0].iso2, citys[nextInList].iso2);
+    strcpy(citys_sorted[0].iso3, citys[nextInList].iso3);
+    strcpy(citys_sorted[0].admin_name, citys[nextInList].admin_name);
+    strcpy(citys_sorted[0].capital, citys[nextInList].capital);
+    citys_sorted[0].population = citys[nextInList].population;
+    citys_sorted[0].population = citys[nextInList].population;
+
+    citys[nextInList].id = 0;
+
+    shortestDistance = 100000;
+
+
+    for(int i = 0; i < *cntr_ptr; i++)
+    {
+        for(int j = 0; j <  *cntr_ptr; j++)
         {
 
 
@@ -232,21 +241,9 @@ void nearestNeighbor(cityTemp citys[100], cityTemp citys_sorted[100], int entrie
         shortestDistance = 10000;
     }
 
-    strcpy(citys_sorted[nextInList+1].city, citys_sorted[0].city);
-    citys_sorted[nextInList+1].lat = citys_sorted[0].lat;
-    citys_sorted[nextInList+1].lng = citys_sorted[0].lng;
-    strcpy(citys_sorted[nextInList+1].country, citys_sorted[0].country);
-    strcpy(citys_sorted[nextInList+1].iso2, citys[0].iso2);
-    strcpy(citys_sorted[nextInList+1].iso3, citys[0].iso3);
-    strcpy(citys_sorted[nextInList+1].admin_name, citys[0].admin_name);
-    strcpy(citys_sorted[nextInList+1].capital, citys[0].capital);
-    citys_sorted[nextInList+1].population = citys[0].population;
-    citys_sorted[nextInList+1].population = citys[0].population;
+    free(citys);
 
-
-    //printf("\nTotal distance = %f\n\n", totalDistance);
-
-
+    return citys_sorted;
 }
 
 
@@ -563,7 +560,7 @@ int menu()
 {
     int choice = 0;
 
-    printf("* * * * * * * * * * * * * * * * * * *\n");
+    printf("\n* * * * * * * * * * * * * * * * * * *\n");
     printf("*                                   *\n");
     printf("*  Willkommen zu Travelling C-AG!   *\n");
     printf("*                                   *\n");
@@ -647,8 +644,5 @@ cityTemp* cityInput(int *cntr_ptr, cityTemp *citys)
 //   printf("\n\n\n---%p\n\n\n", *citys);
 
    return citys;
-
-
-
 }
 
