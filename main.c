@@ -27,6 +27,7 @@ void printShortesRoute();
 cityTemp* nearestNeighbor();
 void readcsv();
 void city_struct_to_csv();
+cityTemp* user_input_to_city_Struct(int*);
 int menu();
 cityTemp* cityInput();
 
@@ -36,6 +37,7 @@ int main()
 {
 
     cityTemp *citys = malloc(sizeof(cityTemp));
+    //cityTemp *citys =
 
 //    printf("\n\n\n---%p\n\n\n", *citys);
 
@@ -51,27 +53,20 @@ int main()
 
         switch(choice)
         {
-
             case 1:
             {
-
-//                printf("\n\n\n111---%p\n\n\n", *citys);
-
                 citys = cityInput(&cntr, citys);                // liest Städte in das citys[] Array ein und füllt das Array mit den Daten aus der CSV
 
-//                printf("\n\n\n111---%p\n\n\n", *citys);
-//                printf("\n\n---%d---\n\n",cntr);
 
+
+                    /*
                     for(int i = 0; i < cntr; i++)                             // test ob die Daten eingelesen werden
                     {
-//                        printf("\n\n---%d---\n\n",cntr);
-//                        printf("\n\n\n---%p\n\n\n", *citys);
-
                         printf("\n\ncity: %s\n",citys[i].city);
 
-                        //printf("cityAscii: %s\n",citys[i].city_ascii);
+                        printf("cityAscii: %s\n",citys[i].city_ascii);
                         printf("lat: %f\n",citys[i].lat);
-                        /*printf("lng: %f\n",citys[i].lng);
+                        printf("lng: %f\n",citys[i].lng);
                         printf("country: %s\n",citys[i].country);
                         printf("iso2: %s\n",citys[i].iso2);
                         printf("iso3: %s\n",citys[i].iso3);
@@ -79,17 +74,15 @@ int main()
                         printf("capital: %s\n",citys[i].capital);
                         printf("population: %ld\n",citys[i].population);
                         printf("id: %ld\n\n",citys[i].id);
-*/
+
                         printf("---------------------------------------------");
 
                     }
-
-
+                    */
 
                 //system("cls");
 
                 break;
-
             }
 
             case 2:
@@ -98,7 +91,9 @@ int main()
 
                 citys = nearestNeighbor(&cntr, citys);
 
-                printShortesRoute(&cntr, citys);
+                //printShortesRoute(&cntr, citys);
+
+                city_struct_to_csv(citys, cntr);
 
                 //Eingabe von Städtenamen
                 //TSM-Problem
@@ -109,6 +104,9 @@ int main()
 
             {
 
+                citys = user_input_to_city_Struct(&cntr4new);
+
+                city_struct_to_csv(citys, cntr4new);
 
 
                 break;
@@ -421,10 +419,12 @@ cityTemp* user_input_to_city_Struct(int *cntr4new)
     while(running)
     {
 
+        getchar();                                                          // da sonst die nächste Einlesefnkt nur '\n' liest
+
         printf("Geben Sie eine Stadt ein: ");
         fgets(temp_city[cntr].city, 50, stdin);
 
-        temp_city[cntr].city[strlen(temp_city[cntr].city) - 1] = '\0';    // nimmt das '\n' am ende vom String weg und macht ein \0 draus
+        temp_city[cntr].city[strlen(temp_city[cntr].city) - 1] = '\0';      // nimmt das '\n' am ende vom String weg und macht ein \0 draus
 
         printf("In welchem Land liegt %s: ", temp_city[cntr].city);
         fgets(temp_city[cntr].country, 50, stdin);
@@ -440,7 +440,7 @@ cityTemp* user_input_to_city_Struct(int *cntr4new)
         printf("Wie viele Menschen leben in %s: ", temp_city[cntr].city);
         scanf("%ld", &temp_city[cntr].population);
 
-        getchar(); // da sonst die nächste Einlesefnkt nur '\n' liest
+        getchar();                                                          // da sonst die nächste Einlesefnkt nur '\n' liest
 
         printf("Was ist der ascii Code von %s: ", temp_city[cntr].city);
         fgets(temp_city[cntr].city_ascii, 50, stdin);
@@ -470,25 +470,11 @@ cityTemp* user_input_to_city_Struct(int *cntr4new)
         printf("Was ist die ID von %s: ", temp_city[cntr].city);
         scanf("%ld", &temp_city[cntr].id);
 
-
-        printf("\n--------------------------\n\n");
-        printf("city: %s\n",temp_city[cntr].city);
-        printf("cityAscii: %s\n",temp_city[cntr].city_ascii);
-        printf("lat: %f\n",temp_city[cntr].lat);
-        printf("lng: %f\n",temp_city[cntr].lng);
-        printf("country: %s\n",temp_city[cntr].country);
-        printf("iso2: %s\n",temp_city[cntr].iso2);
-        printf("iso3: %s\n",temp_city[cntr].iso3);
-        printf("adminName: %s\n",temp_city[cntr].admin_name);
-        printf("capital: %s\n",temp_city[cntr].capital);
-        printf("population: %ld\n",temp_city[cntr].population);
-        printf("id: %ld\n",temp_city[cntr].id);
+        printf("%s wurde zur Datenbank hinzugefuegt\n",temp_city[cntr].city);
 
 
-
-        printf("\n\nWollen sie noch eine Stadt eingeben? (Y/N) ");
+        printf("\n\nWollen sie noch eine Stadt zur Datenbank hinzufuegen? (Y/N) ");
         scanf(" %c", &choice);
-        getchar();
 
         if (choice == 'n' || choice == 'N') break;
 
@@ -511,12 +497,14 @@ cityTemp* user_input_to_city_Struct(int *cntr4new)
 // bekommt einen Pointer zue einenm Datensatz von Städten den er dann in ein File schreibt
 // der counter bestimmt wieviele Städte im Datensatz sind
 
-void city_struct_to_csv(cityTemp *citys, int cntr)
+void city_struct_to_csv(cityTemp* citys, int cntr)
 {
 
     char filename[100] = "newfile.csv"; //"worldcities.csv";
 
-    printf("\nWie heißt die .csv Datei in der Sie die Daten abspeichern wollen? (Sollte die Datei nicht existieren wird eine neue angelegt)\nDateiname: ");
+    getchar();
+
+    printf("\nWie heisst die .csv Datei in der Sie die Daten abspeichern wollen? \n(Sollte die Datei nicht existieren wird eine neue angelegt)\nDateiname: ");
     fgets(filename, 100, stdin);
     filename[strlen(filename) - 1] = '\0';          // nimmt das '\n' am ende vom String weg und macht ein \0 draus
 
@@ -530,6 +518,8 @@ void city_struct_to_csv(cityTemp *citys, int cntr)
         return;
     }
 
+
+    //printed die Werte aus der Structarry in eine CSV Datei
     for(int i = 0; i < cntr; i++)
     {
 
