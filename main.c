@@ -37,9 +37,6 @@ int main()
 {
 
     cityTemp *citys = malloc(sizeof(cityTemp));
-    //cityTemp *citys =
-
-//    printf("\n\n\n---%p\n\n\n", *citys);
 
     int running = 1;
     int cntr = 0;
@@ -59,11 +56,10 @@ int main()
 
 
 
-                    /*
+/*
                     for(int i = 0; i < cntr; i++)                             // test ob die Daten eingelesen werden
                     {
                         printf("\n\ncity: %s\n",citys[i].city);
-
                         printf("cityAscii: %s\n",citys[i].city_ascii);
                         printf("lat: %f\n",citys[i].lat);
                         printf("lng: %f\n",citys[i].lng);
@@ -78,7 +74,7 @@ int main()
                         printf("---------------------------------------------");
 
                     }
-                    */
+*/
 
                 //system("cls");
 
@@ -101,13 +97,30 @@ int main()
                 break;
             }
             case 3:
-
             {
 
                 citys = user_input_to_city_Struct(&cntr4new);
 
-                city_struct_to_csv(citys, cntr4new);
+                for(int i = 0; i < cntr; i++)                             // test ob die Daten eingelesen werden
+                    {
+                        printf("\n\ncity: %s\n",citys[i].city);
+                        printf("cityAscii: %s\n",citys[i].city_ascii);
+                        printf("lat: %f\n",citys[i].lat);
+                        printf("lng: %f\n",citys[i].lng);
+                        printf("country: %s\n",citys[i].country);
+                        printf("iso2: %s\n",citys[i].iso2);
+                        printf("iso3: %s\n",citys[i].iso3);
+                        printf("adminName: %s\n",citys[i].admin_name);
+                        printf("capital: %s\n",citys[i].capital);
+                        printf("population: %ld\n",citys[i].population);
+                        printf("id: %ld\n\n",citys[i].id);
 
+                        printf("---------------------------------------------");
+
+                    }
+                //getchar();
+
+                city_struct_to_csv(citys, cntr4new);
 
                 break;
             }
@@ -119,15 +132,10 @@ int main()
 
 
             default:
-
                 printf("Error");
-
                 running = 0;
                 break;
-
         }
-
-
 
 
     }
@@ -574,34 +582,20 @@ int menu()
 cityTemp* cityInput(int *cntr_ptr, cityTemp *citys)
 {
     char temp[50];
-//    int cntr = *cntr_ptr;
 
-//    printf("\n\n\n%d\n\n\n", cntr);
-
-//    printf("\n\n\n---%p\n\n\n", *citys);
     citys = realloc(citys, 5*sizeof(cityTemp));
-//    printf("\n\n\n---%p\n\n\n", *citys);
 
-    getchar();                                                  //damit fgets() nicht das vorangegangenen Leerzeichen einliest
 
     printf("Geben sie eine Stadt ein: ");
     fgets(temp, 50, stdin);                                     // fegts damit auch Abstände eingelesen werden
     temp[strlen(temp) - 1] = '\0';                              // löscht den Zeilenumbruch am Ende des Strings (falls vorhanden)
-//    cntr++;
 
-//    printf("\n\n\n%d\n\n\n", cntr);
-
-//    readcsv(citys, cntr, temp);                                 // holt sich die Daten aus der CSV Datei
-    readcsv(citys, cntr_ptr, temp);
+    readcsv(citys, cntr_ptr, temp);                             // holt sich die Daten aus der CSV Datei
 
     printf("Geben sie noch eine Stadt ein: ");
     fgets(temp, 50, stdin);
     temp[strlen(temp) - 1] = '\0';
-//    cntr++;
 
-//    printf("\n\n\n%d\n\n\n", cntr);
-
-//    readcsv(citys, cntr, temp);
     readcsv(citys, cntr_ptr, temp);
 
     // fragt solange Städte ab bis 0 eingegeben wird oder der counter 100 ereicht
@@ -614,10 +608,7 @@ cityTemp* cityInput(int *cntr_ptr, cityTemp *citys)
 
         if(temp[0] != '0')
         {
-//            cntr++;
 
-//            citys = realloc(citys, (cntr+1)*sizeof(cityTemp));
-//            readcsv(citys, cntr, temp);
             citys = realloc(citys, (*cntr_ptr+1)*sizeof(cityTemp));
             readcsv(citys, cntr_ptr, temp);
 
@@ -627,13 +618,6 @@ cityTemp* cityInput(int *cntr_ptr, cityTemp *citys)
         else if(temp[0] == '0') break;
 
     }
-
-
-//    *cntr_ptr = cntr;
-
-//    printf("\n\n\n%d\n\n\n", *cntr_ptr);
-
-//   printf("\n\n\n---%p\n\n\n", *citys);
 
    return citys;
 }
