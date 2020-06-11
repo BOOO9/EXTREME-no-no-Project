@@ -30,7 +30,7 @@ void city_struct_to_csv();
 cityTemp* user_input_to_city_Struct(int*);
 int menu();
 cityTemp* cityInput();
-
+void bubble();
 
 
 int main()
@@ -81,7 +81,7 @@ int main()
                     */
 
                 //system("cls");
-
+                bubble(citys, &cntr);
                 break;
             }
 
@@ -400,6 +400,31 @@ void readcsv(cityTemp *searchCity, int *cntr_ptr, char cityName[])
     fclose(myfile);
 }
 
+void bubble(cityTemp *citys, int *cntr_ptr)
+{
+   int i;
+   int citysReverse=*cntr_ptr-1;
+   cityTemp temp;
+
+   while(citysReverse>0)
+   {
+      for(i = 0; i < citysReverse; i++)
+      {
+          if(strcmp(citys[i].city_ascii,citys[i+1].city_ascii)>0)
+          {
+             temp=citys[i+1];
+             citys[i+1]=citys[i];
+             citys[i]=temp;
+          }
+      }
+      citysReverse--;
+   }
+   printf("\nbubble sort:\n");
+   for(i = 0; i < *cntr_ptr; i++)
+   {
+       printf("\ncity: %s\n",citys[i].city);
+   }
+}
 
 
 
