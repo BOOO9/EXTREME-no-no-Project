@@ -70,7 +70,7 @@ int main()
                 printf("\n\nquicksort, sorted by name:\n");
                 for(int i = 0; i <= cntr-1; i++)
                 {
-                    printf("\ncity: %-20s population: %8ld",citys[i].city,citys[i].population);
+                    printf("\ncity: %-20s population: %8ld",citys[i].city_ascii,citys[i].population);
                 }
 
                 array_end = citys;
@@ -82,7 +82,7 @@ int main()
                 printf("\nquicksort, sorted by population:\n");
                 for(int i = 0; i <= cntr-1; i++)
                 {
-                    printf("\ncity: %-20s population: %8ld",citys[i].city,citys[i].population);
+                    printf("\ncity: %-20s population: %8ld",citys[i].city_ascii,citys[i].population);
                 }
 
                 printf("\n\nWollen Sie diese Staedteliste in einer .csv Datei abpseichern? (Y/N) ");
@@ -525,7 +525,13 @@ void quicksort_name(cityTemp *links, cityTemp *rechts)
       w = *ptr1;
       *ptr1 = *ptr2;
       *ptr2 = w;
-   } while(++ptr1 <= --ptr2);
+
+      ptr1++;
+      ptr1_element = *ptr1;
+      ptr2--;
+      ptr2_element = *ptr2;
+
+   } while(ptr1 <= ptr2);
    if(links < ptr2)  quicksort_name(links, ptr2);
    if(ptr1 < rechts) quicksort_name(ptr1, rechts);
 }
@@ -561,9 +567,15 @@ void quicksort_pop(cityTemp *links, cityTemp *rechts)
       w = *ptr1;
       *ptr1 = *ptr2;
       *ptr2 = w;
-   } while(++ptr1 <= --ptr2);
-   if(links < ptr2)  quicksort_name(links, ptr2);
-   if(ptr1 < rechts) quicksort_name(ptr1, rechts);
+
+      ptr1++;
+      ptr1_element = *ptr1;
+      ptr2--;
+      ptr2_element = *ptr2;
+
+   } while(ptr1 <= ptr2);
+   if(links < ptr2)  quicksort_pop(links, ptr2);
+   if(ptr1 < rechts) quicksort_pop(ptr1, rechts);
 }
 
 
