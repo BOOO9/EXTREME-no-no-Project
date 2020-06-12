@@ -54,8 +54,24 @@ int main()
             case 1:                                 // Städte sortiert ausgeben
             {
 
+
                 citys = cityInput(&cntr, citys);    // liest Städte in das citys Array ein und füllt das Array mit den Daten aus der CSV
                 bubble(citys, &cntr);
+
+                printf("\n\nWollen Sie diese Staedteliste in einer .csv Datei abpseichern? (Y/N) ");
+                scanf(" %c", &choice);
+                getchar();
+
+                if (choice == 'y' || choice == 'Y')
+                {
+                    city_struct_to_csv(citys, cntr);
+                }
+                else
+                {
+                    printf("\nStaedteliste wurden geloescht.\n");
+
+                }
+
 
                 break;
             }
@@ -75,7 +91,7 @@ int main()
 
                 if (choice == 'y' || choice == 'Y')
                 {
-                    city_struct_to_csv(citys, cntr4new);
+                    city_struct_to_csv(citys, cntr);
                 }
                 else
                 {
@@ -90,7 +106,7 @@ int main()
 
                 citys = user_input_to_city_Struct(&cntr4new);
 
-                for(int i = 0; i < cntr+1; i++)                             // test ob die Daten eingelesen werden
+                for(int i = 0; i < cntr4new; i++)                             // test ob die Daten eingelesen werden
                     {
                         printf("\n\ncity: %s\n",citys[i].city);
                         printf("cityAscii: %s\n",citys[i].city_ascii);
@@ -531,7 +547,7 @@ void city_struct_to_csv(cityTemp* citys, int cntr)
 
 
 
-    printf("\nWie heisst die .csv Datei in der Sie die Daten abspeichern wollen? \n(Sollte die Datei nicht existieren wird eine neue angelegt)\nDateiname: ");
+    printf("\nGeben Sie den Dateinamen inkl. Dateiendung ein. \n(Sollte die Datei nicht existieren wird eine neue angelegt)\nDateiname: ");
     fgets(filename, 100, stdin);
     filename[strlen(filename) - 1] = '\0';          // nimmt das '\n' am ende vom String weg und macht ein \0 draus
 
