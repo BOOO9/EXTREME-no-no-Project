@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 
 typedef struct
@@ -40,6 +41,9 @@ int main()
     cityTemp *citys = malloc(sizeof(cityTemp));
     cityTemp *array_end;
 
+    float timeSec;
+    clock_t timeBegin, timeEnd;
+
     int running = 1;
     int cntr = 0;
     int cntr4new = 0;
@@ -59,18 +63,26 @@ int main()
 
 
                 citys = cityInput(&cntr, citys);    // liest Städte in das citys Array ein und füllt das Array mit den Daten aus der CSV
-                citys = bubble(citys, &cntr);
 
+                timeBegin = clock();
+                citys = bubble(citys, &cntr);
+                timeEnd = clock();
+
+                timeSec=timeEnd - timeBegin;
+                timeSec/=CLOCKS_PER_SEC;
+                printf("\n\nBenoetigte Zeit um bubblesort zwei mal auszufuehren: %f Sekunden\n\n\n\n", timeSec);
+
+                timeBegin = clock();
                 array_end = citys;
                 for(int i = 0;i<cntr-1;i++)
                 {
                     array_end++;
                 }
                 quicksort_name(citys, array_end);
-                printf("\n\nquicksort, sorted by name:\n");
+                printf("\nquicksort, sorted by name:\n");
                 for(int i = 0; i <= cntr-1; i++)
                 {
-                    printf("\ncity: %-20s population: %8ld",citys[i].city,citys[i].population);
+                    printf("\ncity: %-20s population: %8ld",citys[i].city_ascii,citys[i].population);
                 }
 
                 array_end = citys;
@@ -82,8 +94,14 @@ int main()
                 printf("\nquicksort, sorted by population:\n");
                 for(int i = 0; i <= cntr-1; i++)
                 {
-                    printf("\ncity: %-20s population: %8ld",citys[i].city,citys[i].population);
+                    printf("\ncity: %-20s population: %8ld",citys[i].city_ascii,citys[i].population);
                 }
+
+                timeEnd = clock();
+
+                timeSec=timeEnd - timeBegin;
+                timeSec/=CLOCKS_PER_SEC;
+                printf("\n\nBenoetigte Zeit um quicksort zwei mal auszufuehren: %f Sekunden\n\n\n\n", timeSec);
 
                 printf("\n\nWollen Sie diese Staedteliste in einer .csv Datei abpseichern? (Y/N) ");
                 scanf(" %c", &choice);
@@ -525,7 +543,13 @@ void quicksort_name(cityTemp *links, cityTemp *rechts)
       w = *ptr1;
       *ptr1 = *ptr2;
       *ptr2 = w;
-   } while(++ptr1 <= --ptr2);
+
+      ptr1++;
+      ptr1_element = *ptr1;
+      ptr2--;
+      ptr2_element = *ptr2;
+
+   } while(ptr1 <= ptr2);
    if(links < ptr2)  quicksort_name(links, ptr2);
    if(ptr1 < rechts) quicksort_name(ptr1, rechts);
 }
@@ -561,9 +585,15 @@ void quicksort_pop(cityTemp *links, cityTemp *rechts)
       w = *ptr1;
       *ptr1 = *ptr2;
       *ptr2 = w;
-   } while(++ptr1 <= --ptr2);
-   if(links < ptr2)  quicksort_name(links, ptr2);
-   if(ptr1 < rechts) quicksort_name(ptr1, rechts);
+
+      ptr1++;
+      ptr1_element = *ptr1;
+      ptr2--;
+      ptr2_element = *ptr2;
+
+   } while(ptr1 <= ptr2);
+   if(links < ptr2)  quicksort_pop(links, ptr2);
+   if(ptr1 < rechts) quicksort_pop(ptr1, rechts);
 }
 
 
