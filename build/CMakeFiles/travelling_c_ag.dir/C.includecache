@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/user01/Documents/bst Studium/PAD2/Projekt/EXTREME-no-no-Project/header.h
+
+C:/Users/user01/Documents/bst Studium/PAD2/Projekt/EXTREME-no-no-Project/main.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+math.h
+-
+time.h
+-
+header.h
+C:/Users/user01/Documents/bst Studium/PAD2/Projekt/EXTREME-no-no-Project/header.h
+

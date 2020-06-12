@@ -1,0 +1,2 @@
+C:\MinGW\mingw32\bin\ar.exe qc libtemp_lib.a  CMakeFiles/temp_lib.dir/library.c.obj
+C:\MinGW\mingw32\bin\ranlib.exe libtemp_lib.a
