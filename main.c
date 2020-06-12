@@ -30,12 +30,15 @@ cityTemp* user_input_to_city_Struct(int*);
 int menu();
 cityTemp* cityInput();
 cityTemp* bubble();
+void quicksort_name();
+void quicksort_pop();
 
 
 int main()
 {
 
     cityTemp *citys = malloc(sizeof(cityTemp));
+    cityTemp *array_end;
 
     int running = 1;
     int cntr = 0;
@@ -57,6 +60,30 @@ int main()
 
                 citys = cityInput(&cntr, citys);    // liest Städte in das citys Array ein und füllt das Array mit den Daten aus der CSV
                 citys = bubble(citys, &cntr);
+
+                array_end = citys;
+                for(int i = 0;i<cntr-1;i++)
+                {
+                    array_end++;
+                }
+                quicksort_name(citys, array_end);
+                printf("\n\nquicksort, sorted by name:\n");
+                for(int i = 0; i <= cntr-1; i++)
+                {
+                    printf("\ncity: %-20s population: %8ld",citys[i].city,citys[i].population);
+                }
+
+                array_end = citys;
+                for(int i = 0;i<cntr-1;i++)
+                {
+                    array_end++;
+                }
+                quicksort_pop(citys, array_end);
+                printf("\nquicksort, sorted by population:\n");
+                for(int i = 0; i <= cntr-1; i++)
+                {
+                    printf("\ncity: %-20s population: %8ld",citys[i].city,citys[i].population);
+                }
 
                 printf("\n\nWollen Sie diese Staedteliste in einer .csv Datei abpseichern? (Y/N) ");
                 scanf(" %c", &choice);
@@ -465,6 +492,78 @@ cityTemp* bubble(cityTemp *citys, int *cntr_ptr)
        printf("\ncity: %-20s population: %8ld",citys[i].city,citys[i].population);
    }
    return citys;
+}
+
+void quicksort_name(cityTemp *links, cityTemp *rechts)
+{
+   cityTemp *ptr1 = links;
+   cityTemp *ptr2 = rechts;
+   cityTemp w;
+   cityTemp *x;
+   cityTemp ptr1_element = *ptr1;
+   cityTemp ptr2_element = *ptr2;
+
+   x = (links+(rechts-links)/2);
+   cityTemp x_element = *x;
+
+   do
+   {
+      while(strcmp(ptr1_element.city_ascii,x_element.city_ascii) < 0)
+      {
+          ptr1++;
+          ptr1_element = *ptr1;
+      }
+      while(strcmp(ptr2_element.city_ascii,x_element.city_ascii) > 0)
+      {
+          ptr2--;
+          ptr2_element = *ptr2;
+      }
+      if(ptr1 > ptr2)
+      {
+          break;
+      }
+      w = *ptr1;
+      *ptr1 = *ptr2;
+      *ptr2 = w;
+   } while(++ptr1 <= --ptr2);
+   if(links < ptr2)  quicksort_name(links, ptr2);
+   if(ptr1 < rechts) quicksort_name(ptr1, rechts);
+}
+
+void quicksort_pop(cityTemp *links, cityTemp *rechts)
+{
+   cityTemp *ptr1 = links;
+   cityTemp *ptr2 = rechts;
+   cityTemp w;
+   cityTemp *x;
+   cityTemp ptr1_element = *ptr1;
+   cityTemp ptr2_element = *ptr2;
+
+   x = (links+(rechts-links)/2);
+   cityTemp x_element = *x;
+
+   do
+   {
+      while(ptr1_element.population < x_element.population)
+      {
+          ptr1++;
+          ptr1_element = *ptr1;
+      }
+      while(ptr2_element.population > x_element.population)
+      {
+          ptr2--;
+          ptr2_element = *ptr2;
+      }
+      if(ptr1 > ptr2)
+      {
+          break;
+      }
+      w = *ptr1;
+      *ptr1 = *ptr2;
+      *ptr2 = w;
+   } while(++ptr1 <= --ptr2);
+   if(links < ptr2)  quicksort_name(links, ptr2);
+   if(ptr1 < rechts) quicksort_name(ptr1, rechts);
 }
 
 
