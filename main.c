@@ -3,7 +3,6 @@
 #include <string.h>
 #include <math.h>
 
-//git test
 
 typedef struct
 {
@@ -48,60 +47,50 @@ int main()
 
         int choice = menu();                        //menu() gibt Zahl von 0-3 zurück; 1 = Städte nach Namen sortieren; 2 = Travelling SP; 3 = Städte zur CSV hinzufügen
 
+        getchar();                                  // da sonst die nächste Einlesefnkt nur '\n' liest
+
         switch(choice)
         {
-            case 1:
+            case 1:                                 // Städte sortiert ausgeben
             {
-                citys = cityInput(&cntr, citys);                // liest Städte in das citys[] Array ein und füllt das Array mit den Daten aus der CSV
 
-
-
-/*
-                    for(int i = 0; i < cntr; i++)                             // test ob die Daten eingelesen werden
-                    {
-                        printf("\n\ncity: %s\n",citys[i].city);
-                        printf("cityAscii: %s\n",citys[i].city_ascii);
-                        printf("lat: %f\n",citys[i].lat);
-                        printf("lng: %f\n",citys[i].lng);
-                        printf("country: %s\n",citys[i].country);
-                        printf("iso2: %s\n",citys[i].iso2);
-                        printf("iso3: %s\n",citys[i].iso3);
-                        printf("adminName: %s\n",citys[i].admin_name);
-                        printf("capital: %s\n",citys[i].capital);
-                        printf("population: %ld\n",citys[i].population);
-                        printf("id: %ld\n\n",citys[i].id);
-
-                        printf("---------------------------------------------");
-
-                    }
-*/
-
-                //system("cls");
+                citys = cityInput(&cntr, citys);    // liest Städte in das citys Array ein und füllt das Array mit den Daten aus der CSV
                 bubble(citys, &cntr);
+
                 break;
             }
 
-            case 2:
+            case 2:                                                         // kürzeste Route ermitteln
             {
+
                 citys = cityInput(&cntr, citys);
 
                 citys = nearestNeighbor(&cntr, citys);
 
-                //printShortesRoute(&cntr, citys);
+                printShortesRoute(&cntr, citys);
 
-                city_struct_to_csv(citys, cntr);
+                printf("\n\nWollen Sie diese Staedteliste in einer .csv Datei abpseichern? (Y/N) ");
+                scanf(" %c", &choice);
+                getchar();
 
-                //Eingabe von Städtenamen
-                //TSM-Problem
+                if (choice == 'y' || choice == 'Y')
+                {
+                    city_struct_to_csv(citys, cntr4new);
+                }
+                else
+                {
+                    printf("\nStaedteliste wurden geloescht.\n");
+
+                }
 
                 break;
             }
-            case 3:
+            case 3:                                                         // Städte zur .csv hinzufügen
             {
 
                 citys = user_input_to_city_Struct(&cntr4new);
 
-                for(int i = 0; i < cntr; i++)                             // test ob die Daten eingelesen werden
+                for(int i = 0; i < cntr+1; i++)                             // test ob die Daten eingelesen werden
                     {
                         printf("\n\ncity: %s\n",citys[i].city);
                         printf("cityAscii: %s\n",citys[i].city_ascii);
@@ -115,13 +104,23 @@ int main()
                         printf("population: %ld\n",citys[i].population);
                         printf("id: %ld\n\n",citys[i].id);
 
-                        printf("---------------------------------------------");
+                        printf("---------------------------------------------\n\n");
 
                     }
-                //getchar();
 
-                city_struct_to_csv(citys, cntr4new);
+                printf("\n\nWollen Sie diese Staedteliste in einer .csv Datei abpseichern? (Y/N) ");
+                scanf(" %c", &choice);
+                getchar();
 
+                if (choice == 'y' || choice == 'Y')
+                {
+                    city_struct_to_csv(citys, cntr4new);
+                }
+                else
+                {
+                    printf("\nStaedteliste wurden geloescht.\n");
+
+                }
                 break;
             }
 
@@ -130,13 +129,11 @@ int main()
                 running = 0;
                 break;
 
-
             default:
                 printf("Error");
                 running = 0;
                 break;
         }
-
 
     }
 
@@ -146,7 +143,6 @@ int main()
     return 0;
 
 }
-
 
 
 void printShortesRoute(int *cntr_ptr, cityTemp *citys)
@@ -435,7 +431,6 @@ void bubble(cityTemp *citys, int *cntr_ptr)
 }
 
 
-
 // gibt ein pointer in den heap zurück in dem ein dynamisch allokierter Datensatz von Städten steht
 // es muss ein pointer zu einem counter übergeben werden der die Anzahl der Städte mitzählt
 cityTemp* user_input_to_city_Struct(int *cntr4new)
@@ -452,7 +447,6 @@ cityTemp* user_input_to_city_Struct(int *cntr4new)
     while(running)
     {
 
-        getchar();                                                          // da sonst die nächste Einlesefnkt nur '\n' liest
 
         printf("Geben Sie eine Stadt ein: ");
         fgets(temp_city[cntr].city, 50, stdin);
@@ -508,7 +502,7 @@ cityTemp* user_input_to_city_Struct(int *cntr4new)
 
         printf("\n\nWollen sie noch eine Stadt zur Datenbank hinzufuegen? (Y/N) ");
         scanf(" %c", &choice);
-
+        getchar();
         if (choice == 'n' || choice == 'N') break;
 
         cntr++;
@@ -535,7 +529,7 @@ void city_struct_to_csv(cityTemp* citys, int cntr)
 
     char filename[100] = "newfile.csv"; //"worldcities.csv";
 
-    getchar();
+
 
     printf("\nWie heisst die .csv Datei in der Sie die Daten abspeichern wollen? \n(Sollte die Datei nicht existieren wird eine neue angelegt)\nDateiname: ");
     fgets(filename, 100, stdin);
@@ -580,7 +574,7 @@ void city_struct_to_csv(cityTemp* citys, int cntr)
 }
 
 
-
+//printf the main menu
 int menu()
 {
     int choice = 0;
@@ -612,7 +606,7 @@ cityTemp* cityInput(int *cntr_ptr, cityTemp *citys)
 
 
     printf("Geben sie eine Stadt ein: ");
-    fgets(temp, 50, stdin);                                     // fegts damit auch Abstände eingelesen werden
+    fgets(temp, 50, stdin);                                     // fgets damit auch Abstände eingelesen werden
     temp[strlen(temp) - 1] = '\0';                              // löscht den Zeilenumbruch am Ende des Strings (falls vorhanden)
 
     readcsv(citys, cntr_ptr, temp);                             // holt sich die Daten aus der CSV Datei
