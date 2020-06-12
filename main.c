@@ -29,7 +29,7 @@ void city_struct_to_csv();
 cityTemp* user_input_to_city_Struct(int*);
 int menu();
 cityTemp* cityInput();
-void bubble();
+cityTemp* bubble();
 
 
 int main()
@@ -56,7 +56,7 @@ int main()
 
 
                 citys = cityInput(&cntr, citys);    // liest Städte in das citys Array ein und füllt das Array mit den Daten aus der CSV
-                bubble(citys, &cntr);
+                citys = bubble(citys, &cntr);
 
                 printf("\n\nWollen Sie diese Staedteliste in einer .csv Datei abpseichern? (Y/N) ");
                 scanf(" %c", &choice);
@@ -420,7 +420,7 @@ void readcsv(cityTemp *searchCity, int *cntr_ptr, char cityName[])
     fclose(myfile);
 }
 
-void bubble(cityTemp *citys, int *cntr_ptr)
+cityTemp* bubble(cityTemp *citys, int *cntr_ptr)
 {
    int i;
    int citysReverse=*cntr_ptr-1;
@@ -439,11 +439,32 @@ void bubble(cityTemp *citys, int *cntr_ptr)
       }
       citysReverse--;
    }
-   printf("\nbubble sort:\n");
+   printf("\nbubblesort, sorted by name:\n");
    for(i = 0; i < *cntr_ptr; i++)
    {
-       printf("\ncity: %s\n",citys[i].city);
+       printf("\ncity: %-20s population: %8ld",citys[i].city,citys[i].population);
    }
+
+   citysReverse=*cntr_ptr-1;
+   while(citysReverse>0)
+   {
+      for(i = 0; i < citysReverse; i++)
+      {
+          if(citys[i].population > citys[i+1].population)
+          {
+             temp=citys[i+1];
+             citys[i+1]=citys[i];
+             citys[i]=temp;
+          }
+      }
+      citysReverse--;
+   }
+   printf("\n\nbubblesort, sorted by population:\n");
+   for(i = 0; i < *cntr_ptr; i++)
+   {
+       printf("\ncity: %-20s population: %8ld",citys[i].city,citys[i].population);
+   }
+   return citys;
 }
 
 
