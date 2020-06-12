@@ -270,7 +270,7 @@ cityTemp* nearestNeighbor(int *cntr_ptr, cityTemp *citys)
 
 void readcsv(cityTemp *searchCity, int *cntr_ptr, char cityName[])
 {
-//    printf("\n\n\n---%p\n\n\n", *searchCity);
+
 
     int position = *cntr_ptr;
 
@@ -618,7 +618,7 @@ cityTemp* cityInput(int *cntr_ptr, cityTemp *citys)
 {
     char temp[50];
 
-    citys = realloc(citys, 5*sizeof(cityTemp));
+    citys = realloc(citys, 2*sizeof(cityTemp));
 
 
     printf("Geben sie eine Stadt ein: ");
